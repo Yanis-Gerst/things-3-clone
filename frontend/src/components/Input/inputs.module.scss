@@ -1,0 +1,38 @@
+.inputs-container {
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
+  background-color: #333;
+}
+
+.inputs {
+  border: 1px solid var(--stroke-light);
+  border-radius: 4px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+
+
+
+  input {
+    background-color: #333;
+    font-size: 1rem;
+    border: none;
+
+    &:hover {
+      outline: none;
+      border: none;
+    }
+
+    &:focus {
+      outline: none;
+      border: none;
+    }
+  }
+}
+
+.inputs__errors {
+  color: #333;
+}
