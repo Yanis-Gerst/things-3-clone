@@ -1,8 +1,4 @@
 import React from "react";
-import taskDetailsDeadlineIcon from "../../../../public/assets/TaskDetailsDeadline.svg?url";
-import taskDetailsCalendarIcon from "../../../../public/assets/TaskDetailsCalendar.svg?url";
-import Image from "next/image";
-import DatePickerInput from "@/components/DateComponents/DatePickerInput/DatePickerInput";
 import { IDatePickerConfig } from "@/components/DateComponents/DatePicker/DatePicker";
 import ToDoDateSetter from "@/features/ToDoDateSetter";
 import DeadlineSetter from "@/features/DeadlineSetter";

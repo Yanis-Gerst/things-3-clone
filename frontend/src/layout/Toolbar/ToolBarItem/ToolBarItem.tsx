@@ -20,15 +20,29 @@ const ToolBarItem = ({ toolConfig, showToolbarTodoDetails }: Props) => {
   return (
     <div
       key={toolConfig.id}
-      className={`w-full h-full grid place-items-center rounded  transition-transform duration-150 delay-150 hover:outline hover:outline-stroke py-2 ${
-        isDisable ? "brightness-50" : ""
-      }  ${showToolbarTodoDetails ? "translate-y-full delay-0" : "delay-150"}`}
+      className={`w-full h-full transition-transform duration-150 delay-150  cursor-pointer  ${
+        isDisable ? "brightness-50 pointer-events-none" : ""
+      }  ${showToolbarTodoDetails ? "translate-y-full delay-0" : "delay-150"} ${
+        toolConfig.SetterComponent
+          ? ""
+          : " grid place-items-center rounded py-1 hover:outline-stroke hover:outline"
+      }`}
       onClick={toolConfig.onClick}
     >
       {toolConfig.SetterComponent ? (
-        <toolConfig.SetterComponent />
+        <toolConfig.SetterComponent
+          className={
+            "hover:outline hover:outline-stroke w-full h-full grid place-items-center rounded py-1"
+          }
+        />
       ) : (
-        <Image src={toolConfig.icon} alt="toolbar" width={24} height={24} />
+        <Image
+          src={toolConfig.icon}
+          alt="toolbar"
+          width={24}
+          height={24}
+          className="w-[24px] h-[24px]"
+        />
       )}
     </div>
   );

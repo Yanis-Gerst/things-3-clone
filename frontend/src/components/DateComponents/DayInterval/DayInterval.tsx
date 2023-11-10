@@ -1,7 +1,7 @@
 import {
   addDaysToDate,
-  getMonthShortcut,
   getDaysLeftOfWeek,
+  getMonthShortcut,
   getNumberOfDaysBeetween,
   numberToArray,
 } from "@/utils/Date/date";
@@ -29,15 +29,14 @@ const DayInterval: React.FC<Props> = ({
 }) => {
   const centerRef = useRef<number | null>(null);
 
-  const numberOfDateToDisplay = getNumberOfDaysBeetween(start, end);
+  const numberOfDateToDisplay = getNumberOfDaysBeetween(start, end) + 1;
   const numberOfDaysInFirstWeek = getDaysLeftOfWeek(start);
 
   if (numberOfDateToDisplay <= 0) {
-    throw Error("Is the same day");
+    throw Error("Date Interval must be at least zero day apart");
   }
 
   const dayToDisplayArray = numberToArray(numberOfDateToDisplay);
-
   const firstElemRef = useRef<HTMLButtonElement>(null);
   const lastElemRef = useRef<HTMLButtonElement>(null);
   const monthElemRef = useRef<HTMLParagraphElement>(null);
@@ -46,8 +45,7 @@ const DayInterval: React.FC<Props> = ({
     if (!lastElemRef.current || !firstElemRef.current) return;
     const top = firstElemRef.current.offsetTop;
     const bottom = lastElemRef.current.offsetTop;
-    const mid = (bottom + top) / 2;
-    centerRef.current = mid;
+    centerRef.current = (bottom + top) / 2;
   }, []);
   return (
     <>
@@ -55,9 +53,8 @@ const DayInterval: React.FC<Props> = ({
         const date = addDaysToDate(start, index);
 
         return (
-          <>
+          <React.Fragment key={date.getTime()}>
             <DateButton
-              key={index}
               submitDateValue={date}
               center
               ref={
@@ -67,7 +64,7 @@ const DayInterval: React.FC<Props> = ({
                   ? lastElemRef
                   : null
               }
-              specifiqStyle={
+              specificStyle={
                 isLastWeek(dayToDisplayArray, index) && border
                   ? `relative after:content[''] after:h-px after:w-full after:absolute after:bottom-0 after:bg-tertiaryContent ${
                       isLastElement(dayToDisplayArray, index) &&
@@ -84,7 +81,7 @@ const DayInterval: React.FC<Props> = ({
                     <span className="flex flex-col leading-3 text-[10px] w-min font-bold absolute">
                       <p>
                         {getMonthShortcut(
-                          monthNames[date.getMonth()]
+                          monthNames[date.getMonth()],
                         ).toLowerCase()}
                       </p>{" "}
                       <p>{date.getDate()}</p>
@@ -100,7 +97,7 @@ const DayInterval: React.FC<Props> = ({
             {labelOnScroll && (
               <p
                 className={`absolute font-bold mx-auto scroll-gradient px-6 rounded transition-all pointer-events-none ${
-                  isScrolling ? "opactiy-1" : "opacity-0"
+                  isScrolling ? "opacity-1" : "opacity-0"
                 }`}
                 style={{ top: `${centerRef.current}px` }}
                 ref={monthElemRef}
@@ -109,7 +106,7 @@ const DayInterval: React.FC<Props> = ({
                 {labelOnScroll}
               </p>
             )}
-          </>
+          </React.Fragment>
         );
       })}
     </>

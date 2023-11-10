@@ -53,8 +53,8 @@ const TodoDisplayProps = () => {
       <div className="flex gap-2 items-center">
         <div className="w-[16px] h-[16px]">
           <FillDeadlineIcon
-            fill={diffDaysDeadLine !== 0 ? "#ECEBEB" : "#F34D61"}
-            stroke={diffDaysDeadLine !== 0 ? "#ECEBEB" : "#F34D61"}
+            fill={diffDaysDeadLine > 0 ? "#ECEBEB" : "#F34D61"}
+            stroke={diffDaysDeadLine > 0 ? "#ECEBEB" : "#F34D61"}
             className="w-full h-full"
           />
         </div>
@@ -69,7 +69,7 @@ const TodoDisplayProps = () => {
           {diffDaysDeadLine === 0
             ? "today"
             : diffDaysDeadLine < 0
-            ? `${diffDaysDeadLine} days ago`
+            ? `${-diffDaysDeadLine} days ago`
             : `${diffDaysDeadLine} days left`}
         </p>
       </div>

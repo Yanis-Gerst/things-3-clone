@@ -3,14 +3,28 @@ package storage
 import (
 	"context"
 	"example/crud-todo-app/backend/types"
+	"example/crud-todo-app/backend/utils"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (store *MongoStorer) PostUser(user types.User) error {
-	_, err := store.UserCollection.InsertOne(context.TODO(), user)
-	return err
+func (store *MongoStorer) PostUser(user types.User) (types.ID, error) {
+	newId := primitive.NewObjectID()
+	newIdHex := types.ID(newId.Hex())
+	user.Id = newId
+
+	userWithEncrypPassword, err := utils.EncryptUserPassword(user)
+	if err != nil {
+		return newIdHex, err
+	}
+
+	_, err = store.UserCollection.InsertOne(context.TODO(), userWithEncrypPassword)
+	return newIdHex, err
 }
 
-func (store *MongoStorer) PostTodo(todo types.Todos) error {
+func (store *MongoStorer) PostTodo(todo types.Todos) (types.ID, error) {
+	newId := primitive.NewObjectID()
+	todo.Id = newId
 	_, err := store.TodosCollection.InsertOne(context.TODO(), todo)
-	return err
+	return types.ID(newId.Hex()), err
 }

@@ -4,46 +4,54 @@ import (
 	"context"
 	"errors"
 	"example/crud-todo-app/backend/types"
+
 	"go.mongodb.org/mongo-driver/bson"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func (store *MongoStorer) GetUserWithTodosByLogin(requestData types.LogUserData) ([]types.UserWithTodos, error) {
+func (store *MongoStorer) GetUserWithTodosByLogin(requestData types.LogUserData) (types.UserWithEncryptedPasswordAndTodos, error) {
+
 	pipeline := bson.A{
 		bson.D{
-			{"$match", bson.D{
+			{Key: "$match", Value: bson.D{
 				{
-					"mail", requestData.Mail,
-				},
-				{
-					"password", requestData.Password,
+					Key: "mail", Value: requestData.Mail,
 				},
 			}},
 		},
 		bson.D{
-			{"$lookup", bson.D{
-				{"from", "Todos"},
-				{"localField", "_id"},
-				{"foreignField", "userId"},
-				{"as", "todos"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "Todos"},
+				{Key: "localField", Value: "_id"},
+				{Key: "foreignField", Value: "userId"},
+				{Key: "as", Value: "todos"},
 			}},
 		},
 	}
 
-	var response []types.UserWithTodos
+	var logUser types.UserWithEncryptedPasswordAndTodos
+	var response []types.UserWithEncryptedPasswordAndTodos
 	cur, err := store.UserCollection.Aggregate(context.TODO(), pipeline)
 	if err != nil {
-		return response, err
+		return logUser, err
 	}
 
 	err = cur.All(context.TODO(), &response)
 	if err != nil {
-		return response, err
+		return logUser, err
 	}
 	if len(response) < 1 {
-		return response, errors.New("no match")
+		return logUser, errors.New("no match")
 	}
 
-	return response, nil
+	logUser = response[0]
+
+	err = bcrypt.CompareHashAndPassword(logUser.Password, []byte(requestData.Password))
+	if err != nil {
+		return logUser, errors.New("wrong password or email")
+	}
+
+	return logUser, nil
 }
 
 func (store *MongoStorer) GetUserById(userId types.ID) (*types.User, error) {
@@ -86,7 +94,48 @@ func (store *MongoStorer) GetUserTodo(todoId types.ID) (*types.Todos, error) {
 	filter := bson.D{{Key: "_id", Value: objId}}
 
 	store.TodosCollection.FindOne(context.TODO(), filter).Decode(&response)
-
 	return &response, nil
+
+}
+
+func (store *MongoStorer) GetUserWithTodosById(id types.ID) (*types.UserWithTodos, error) {
+	objId, err := convertIdToObjectId(id)
+	var response []types.UserWithTodos
+	if err != nil {
+		return nil, errStore
+	}
+
+	pipeline := bson.A{
+		bson.D{
+			{"$match", bson.D{
+				{
+					"_id", objId,
+				},
+			}},
+		},
+		bson.D{
+			{"$lookup", bson.D{
+				{"from", "Todos"},
+				{"localField", "_id"},
+				{"foreignField", "userId"},
+				{"as", "todos"},
+			}},
+		},
+	}
+
+	cur, err := store.UserCollection.Aggregate(context.TODO(), pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cur.All(context.TODO(), &response)
+	if err != nil {
+		return nil, err
+	}
+	if len(response) < 1 {
+		return nil, errors.New("no match")
+	}
+
+	return &response[0], nil
 
 }

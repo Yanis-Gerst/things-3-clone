@@ -11,12 +11,15 @@ import { useSetterToolbarContext } from "@/hooks/useToolbarContext";
 import { IToolbarContext } from "@/utils/ToolbarProvider";
 import TodoDetails from "./TodoDetails/TodoDetails";
 import { useDeleteTodo } from "@/hooks/CRUD/useDeleteTodo";
-import { useEffectAfterInitRender } from "@/hooks/useEffectAfiterInitRender";
+import { useUpdateTodo } from "@/hooks/CRUD/useUpdateTodo";
 
 interface Props {
   todo: Todos;
   isNew?: boolean;
 }
+type Test = {
+  [key in keyof Todos]: string;
+};
 
 export const TodoContext = createContext<Todos | null>(null);
 
@@ -31,6 +34,18 @@ const Todo = ({ todo, isNew }: Props) => {
   const todoContainerRef = useRef<HTMLDivElement>(null);
 
   const deleter = useDeleteTodo();
+  const updater = useUpdateTodo();
+
+  const handleUpdate = (updatedData: Partial<Todos>) => {
+    const currentField = Object.keys(updatedData)[0] as keyof Todos;
+    if (currentField in todo === false)
+      throw Error(`Provide field${currentField} is not a key in ${todo}`);
+    if (todo[currentField] === updatedData[currentField]) return;
+    updater({
+      ...todo,
+      ...updatedData,
+    });
+  };
 
   const handleDoubleClick = (e: React.MouseEvent) => {
     if (e.detail !== 2 || showTodoDetails) return;
@@ -41,6 +56,10 @@ const Todo = ({ todo, isNew }: Props) => {
   const handleShortcut = (e: React.KeyboardEvent<HTMLElement>) => {
     if ((e.key === "Backspace" || e.key === "Delete") && !showTodoDetails) {
       deleter(todo._id);
+      setToolbarState((currentState) => ({
+        ...currentState,
+        focusedTodo: null,
+      }));
     }
     if (e.key === "Enter") {
       if (showTodoDetails) {
@@ -97,6 +116,7 @@ const Todo = ({ todo, isNew }: Props) => {
         handleBlurOnMouseDown
       );
     },
+
     [setToolbarState]
   );
 
@@ -147,6 +167,7 @@ const Todo = ({ todo, isNew }: Props) => {
               field="title"
               className="empty:before:content-['New_Task']"
               ref={titleInput}
+              toUpdate={handleUpdate}
             >
               {todo.title}
             </ContentEditableInput>
@@ -162,6 +183,7 @@ const Todo = ({ todo, isNew }: Props) => {
               className="ml-7 mb-2 empty:before:content-['Notes'] w-full block"
               field="descriptions"
               ref={descriptionsInput}
+              toUpdate={handleUpdate}
             >
               {todo.descriptions}
             </ContentEditableInput>

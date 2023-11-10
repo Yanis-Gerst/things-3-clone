@@ -1,7 +1,8 @@
-import React, { createContext, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import DatePickerHeader from "./DatePickerHeader/DatePickerHeader";
 import DatePickerFooter from "./DatePickerFooter/DatePickerFooter";
 import Calendar from "../Calendar/Calendar";
+import FunctionContextProvider from "@/utils/FunctionContextProvider";
 
 export type IDatePickerConfig = {
   showHeader?: boolean;
@@ -9,6 +10,7 @@ export type IDatePickerConfig = {
   displayDay?: boolean;
   nextDaysToDisplay: number | "all";
   todayIcon?: boolean;
+  toUpdate: (updatedData: object) => void;
 };
 
 interface Props {
@@ -44,20 +46,23 @@ const DatePicker: React.FC<Props> = ({ config }) => {
     <div
       className={`w-max bg-[#2C3137] border border-[#3D4147] absolute py-1 px-2 rounded shadow-base ${
         overflowRight ? "right-0" : "-translate-x-1/2 "
-      } ${overflowBottom ? "-top-3 -translate-y-full" : ""}`}
+      } ${
+        overflowBottom ? "-top-1 left-0 translate-x-0 -translate-y-full" : ""
+      }`}
       ref={datePickerRef}
+      aria-label="Date picker"
     >
-      {(config.showHeader || config.showHeader) === undefined && (
-        <DatePickerHeader />
-      )}
-      <Calendar
-        nextDayToDisplay={config.nextDaysToDisplay}
-        displayDay={config.displayDay === undefined ? true : config.displayDay}
-        todayIcon={config.todayIcon}
-      />
-      {(config.showFooter || config.showFooter === undefined) && (
-        <DatePickerFooter />
-      )}
+      <FunctionContextProvider value={config.toUpdate}>
+        {config.showHeader && <DatePickerHeader />}
+        <Calendar
+          nextDayToDisplay={config.nextDaysToDisplay}
+          displayDay={
+            config.displayDay === undefined ? true : config.displayDay
+          }
+          todayIcon={config.todayIcon}
+        />
+        {config.showFooter && <DatePickerFooter />}
+      </FunctionContextProvider>
     </div>
   );
 };

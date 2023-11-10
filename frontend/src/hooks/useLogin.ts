@@ -10,6 +10,7 @@ export const useLogin = (
   const queryClient = useQueryClient();
   const mutation = useMutation(getter, {
     onSuccess: (data) => {
+      console.log(data);
       queryClient.setQueryData(["user"], data);
       router.push(pushUrl);
     },

@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"encoding/json"
@@ -10,13 +10,14 @@ import (
 )
 
 var httpMethods = []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete}
+var frontendUrl = "http://localhost:3000"
 
-func (server *Server) handleHttpMethod(handlersMap types.MapMethodHandler) http.HandlerFunc {
+func HandleHttpMethod(handlersMap types.MapMethodHandler) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		server.enableCors(&w)
+		enableCors(&w)
 		if r.Method == "OPTIONS" {
-			server.checkPreflightRequest(&w)
+			checkPreflightRequest(&w)
 			return
 		}
 
@@ -37,19 +38,24 @@ func (server *Server) handleHttpMethod(handlersMap types.MapMethodHandler) http.
 		}
 
 		if !isMethodHandle {
-			apiError(w, errors.New("not handle method"), http.StatusBadRequest)
+			HandleError(w, errors.New("not handle method"), http.StatusBadRequest)
 		}
 
 	}
 }
 
-func checkRequestAndGetDataFrom[T any](r *http.Request, urlString string) (T, error) {
-	err := isGoodUrl(r, urlString)
-	var validData T
-	if err != nil {
-		return validData, err
-	}
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", frontendUrl)
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	(*w).Header().Set("Access-Control-Allow-Methods", "*")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+}
 
+func checkPreflightRequest(w *http.ResponseWriter) {
+	(*w).WriteHeader(http.StatusOK)
+}
+
+func CheckRequestAndGetDataFrom[T any](r *http.Request) (T, error) {
 	requestData, err := convertJsonRequestToGoValue[T](r)
 
 	validData, ok := types.ValidateType[T](requestData)
@@ -60,7 +66,7 @@ func checkRequestAndGetDataFrom[T any](r *http.Request, urlString string) (T, er
 	return validData, err
 }
 
-func isGoodUrl(r *http.Request, urlString string) error {
+func IsGoodUrl(r *http.Request, urlString string) error {
 	regexString := fmt.Sprintf(`^\/%v$`, urlString)
 	getUserExpression := regexp.MustCompile(regexString)
 
@@ -77,7 +83,7 @@ func convertJsonRequestToGoValue[T any](r *http.Request) (T, error) {
 	return requestData, err
 }
 
-func getIdFromJsonRequest(requestData map[string]types.ID) (types.ID, error) {
+func GetIdFromJsonRequest(requestData map[string]types.ID) (types.ID, error) {
 	val, ok := requestData["_id"]
 	if !ok {
 		return "", errors.New("wrong Data Send Format")
@@ -85,12 +91,12 @@ func getIdFromJsonRequest(requestData map[string]types.ID) (types.ID, error) {
 	return val, nil
 }
 
-func apiError(w http.ResponseWriter, err error, statusCode int) {
+func HandleError(w http.ResponseWriter, err error, statusCode int) {
 	w.WriteHeader(statusCode)
 	_ = json.NewEncoder(w).Encode(types.NewJsonResponse[interface{}]("error", nil, err.Error()))
 }
 
-func okResponseAndSendData(w http.ResponseWriter, response any) {
+func SendOkResponseWithBody(w http.ResponseWriter, response any) {
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(response)
 

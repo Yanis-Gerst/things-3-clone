@@ -1,7 +1,7 @@
 package main
 
 import (
-	"example/crud-todo-app/backend/api"
+	api "example/crud-todo-app/backend/api/server"
 	"example/crud-todo-app/backend/storage"
 	"log"
 

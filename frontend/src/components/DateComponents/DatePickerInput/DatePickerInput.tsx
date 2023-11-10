@@ -48,7 +48,9 @@ const DatePickerInput: React.FC<Props> = ({
 
   return (
     <div
-      className={`relative cursor-pointer ${className}`}
+      className={`relative cursor-pointer ${className} ${
+        showDatePicker ? "bg-stroke" : ""
+      }`}
       onClick={() => {
         if (showDatePicker) return;
         setShowDatePicker(true);

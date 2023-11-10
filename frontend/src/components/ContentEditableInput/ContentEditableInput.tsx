@@ -1,29 +1,17 @@
-import { updateTodo } from "@/api/fetch";
-import { useTodoContext } from "@/hooks/useTodoContext";
-import { useUpdateTodo } from "@/hooks/CRUD/useUpdateTodo";
 import React, { forwardRef } from "react";
 
+export type IToUpdate = (updatedData: object) => void;
 interface Props {
-  field: keyof Todos;
+  field: string;
   children: string;
   className?: string;
+  toUpdate: IToUpdate;
 }
 
 const ContentEditableInput = forwardRef<HTMLSpanElement, Props>(
-  ({ field, children, className }, ref) => {
-    const todo = useTodoContext() as Todos;
-    const updater = useUpdateTodo();
-
+  ({ field, children, className, toUpdate }, ref) => {
     const handleUpdate = (e: React.FocusEvent<HTMLSpanElement>) => {
-      const field = e.target.getAttribute("data-field") as keyof Todos;
-      if (!field) {
-        throw Error("Incorrect Field");
-      }
-      if (e.target.innerText === todo[field]) return;
-      updater({
-        ...todo,
-        [field]: e.target.innerText,
-      });
+      toUpdate({ [field]: e.target.textContent });
     };
 
     const handleFocus = (e: React.FocusEvent<HTMLSpanElement>) => {
@@ -35,6 +23,7 @@ const ContentEditableInput = forwardRef<HTMLSpanElement, Props>(
       selection?.removeAllRanges(); //remove any selections already made
       selection?.addRange(range); //make the range you have just created the visible selection
     };
+
     return (
       <span
         className={`bg-transparent outline-none w-full pr-2 empty:before:text-secondaryContent cursor-text ${className}`}

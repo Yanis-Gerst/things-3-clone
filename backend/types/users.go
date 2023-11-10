@@ -24,6 +24,21 @@ type UserWithTodos struct {
 	Todos    []Todos            `json:"todos" bson:"todos"`
 }
 
+type UserWithEncryptedPassword struct {
+	Id       primitive.ObjectID `json:"_id" bson:"_id"`
+	Name     string             `json:"name" bson:"name"`
+	Mail     string             `json:"mail" bson:"mail"`
+	Password []byte             `json:"password" bson:"password"`
+}
+
+type UserWithEncryptedPasswordAndTodos struct {
+	Id       primitive.ObjectID `json:"_id" bson:"_id"`
+	Name     string             `json:"name" bson:"name"`
+	Mail     string             `json:"mail" bson:"mail"`
+	Password []byte             `json:"password" bson:"password"`
+	Todos    []Todos            `json:"todos" bson:"todos"`
+}
+
 type ID string
 
 func ValidateType[T any](data any) (T, bool) {

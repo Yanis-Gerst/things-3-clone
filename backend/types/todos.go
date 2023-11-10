@@ -15,3 +15,8 @@ type Todos struct {
 	Descriptions string             `json:"descriptions" bson:"descriptions"`
 	UserId       primitive.ObjectID `json:"userId" bson:"userId"`
 }
+
+func (todo Todos) SetId(newId primitive.ObjectID) {
+	todoPointer := &todo
+	todoPointer.Id = newId
+}

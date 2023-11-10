@@ -5,16 +5,17 @@ import (
 	"errors"
 	"example/crud-todo-app/backend/types"
 	"fmt"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 var errCantUpdate = errors.New("we can't find your data")
 
-func (store *MongoStorer) UpdateUser(user types.User) error {
-
+func (store *MongoStorer) UpdateUser(user types.User) (types.ID, error) {
+	var response types.ID
 	bsonDoc, err := toBsonDoc(user)
 	if err != nil {
-		return err
+		return response, err
 	}
 	filter := bson.D{{"_id", user.Id}}
 	update := bson.D{{"$set", bsonDoc}}
@@ -22,17 +23,17 @@ func (store *MongoStorer) UpdateUser(user types.User) error {
 	result, err := store.UserCollection.UpdateOne(context.TODO(), filter, update)
 
 	if result.MatchedCount < 1 && err != nil {
-		return errCantUpdate
+		return response, errCantUpdate
 	}
-	return err
+	return types.ID(user.Id.Hex()), nil
 
 }
 
-func (store *MongoStorer) UpdateTodo(todo types.Todos) error {
-
+func (store *MongoStorer) UpdateTodo(todo types.Todos) (types.ID, error) {
+	var response types.ID
 	bsonDoc, err := toBsonDoc(todo)
 	if err != nil {
-		return err
+		return response, err
 	}
 	filter := bson.D{{"_id", todo.Id}}
 	update := bson.D{{"$set", bsonDoc}}
@@ -40,10 +41,10 @@ func (store *MongoStorer) UpdateTodo(todo types.Todos) error {
 	result, err := store.TodosCollection.UpdateOne(context.TODO(), filter, update)
 	if result.MatchedCount < 1 && err != nil {
 
-		return errCantUpdate
+		return response, errCantUpdate
 	}
 
-	return err
+	return response, nil
 
 }
 

@@ -12,16 +12,7 @@ import trashIcon from "../../../public/assets/Trash.svg?url";
 import ToDoDateSetter from "@/features/ToDoDateSetter";
 import DeadlineSetter from "@/features/DeadlineSetter";
 import { TodoContext } from "@/components/Todo/Todo";
-
-const emptyTodo = (userId: string): Todos => ({
-  _id: "",
-  title: "",
-  createdAt: new Date(),
-  toDoAt: new Date(),
-  deadlineAt: new Date(),
-  userId,
-  descriptions: "",
-});
+import { emptyTodo } from "@/components/DateComponents/DatePicker/data";
 
 const isUndefinedOrNull = (elt: any) => {
   return elt === undefined || elt === null;

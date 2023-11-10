@@ -1,5 +1,7 @@
 import { IDatePickerConfig } from "@/components/DateComponents/DatePicker/DatePicker";
 import DatePickerInput from "@/components/DateComponents/DatePickerInput/DatePickerInput";
+import { useUpdateTodo } from "@/hooks/CRUD/useUpdateTodo";
+import { useTodoContext } from "@/hooks/useTodoContext";
 import Image from "next/image";
 import React from "react";
 
@@ -10,7 +12,19 @@ interface Props {
   config: IDatePickerConfig;
   todoField: keyof Todos;
 }
+
 const Setter = ({ icon, alt, className = "", config, todoField }: Props) => {
+  const updater = useUpdateTodo();
+  const todo = useTodoContext() as Todos;
+  const toUpdateContructor = (todoField: keyof Todos) => {
+    return (updatedData: Date) => {
+      updater({
+        ...todo,
+        [todoField]: updatedData,
+      });
+    };
+  };
+
   return (
     <DatePickerInput
       todoField={todoField}

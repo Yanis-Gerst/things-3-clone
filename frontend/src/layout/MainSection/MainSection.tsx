@@ -18,7 +18,7 @@ const MainSection = ({ index, todos }: Props) => {
   }, [setNewTodo, todos.length]);
 
   return (
-    <section className="bg-main w-5/6 border-l border-black border-solid min-h-screen flex flex-col">
+    <section className="bg-main w-full border-l border-black border-solid min-h-screen flex flex-col">
       <div className="pt-20 px-[5.5rem] w-full grow" id="main-section">
         <h1 className="flex gap-2 items-center text-2xl mb-8 font-bold ml-1">
           <Image

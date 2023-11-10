@@ -16,6 +16,7 @@ interface Props {
   displayDay?: boolean;
   nextDayToDisplay: number | "all";
   todayIcon?: boolean;
+  displayStartMonth?: boolean;
 }
 
 let timeoutId: NodeJS.Timeout;
@@ -24,6 +25,7 @@ const Calendar: React.FC<Props> = ({
   displayDay = true,
   nextDayToDisplay,
   todayIcon = false,
+  displayStartMonth,
 }) => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [monthToDisplay, setMonthToDisplay] = useState(3);
@@ -31,7 +33,7 @@ const Calendar: React.FC<Props> = ({
   const currentDate = new Date();
   const numberOfRemainingMonth = 11 - currentDate.getMonth();
   const daysLeftInCurrentMonth =
-    getDaysOfMonth(currentDate.getFullYear(), currentDate.getMonth()) -
+    getDaysOfMonth(currentDate.getFullYear(), currentDate.getMonth() + 1) -
     currentDate.getDate();
 
   const handleScroll = () => {
@@ -49,7 +51,7 @@ const Calendar: React.FC<Props> = ({
     if (!calendarRef.current) return;
     const calendarElement = calendarRef.current;
     const childOfLastMonth = calendarElement.children.item(
-      calendarElement.children.length - 60
+      calendarElement.children.length - 60,
     );
     if (!childOfLastMonth) return;
 
@@ -60,7 +62,7 @@ const Calendar: React.FC<Props> = ({
       },
       {
         threshold: 1,
-      }
+      },
     );
     observer.observe(childOfLastMonth);
 
@@ -98,10 +100,11 @@ const Calendar: React.FC<Props> = ({
             start={todayIcon ? addDaysToDate(currentDate, 1) : currentDate}
             end={
               typeof nextDayToDisplay === "number"
-                ? addDaysToDate(currentDate, nextDayToDisplay)
+                ? addDaysToDate(currentDate, nextDayToDisplay - 1)
                 : addDaysToDate(currentDate, daysLeftInCurrentMonth)
             }
             border={nextDayToDisplay === "all"}
+            displayStartMonth={displayStartMonth}
           />
 
           {nextDayToDisplay === "all" &&

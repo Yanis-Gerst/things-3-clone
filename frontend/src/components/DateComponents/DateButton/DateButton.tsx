@@ -1,32 +1,24 @@
-import { updateTodo } from "@/api/fetch";
-import { useTodoContext } from "@/hooks/useTodoContext";
-import { useUpdateTodo } from "@/hooks/CRUD/useUpdateTodo";
-import { TodoFieldContext } from "@/utils/TodoFieldProvider";
-import React, { Children, forwardRef, useContext } from "react";
+import React, { Children, forwardRef } from "react";
+import { useFunctionContext } from "@/utils/FunctionContextProvider";
 
 interface Props {
   submitDateValue?: Date;
   children: React.ReactNode;
   center?: boolean;
-  specifiqStyle?: string;
+  specificStyle?: string;
 }
 const DateButton = forwardRef<HTMLButtonElement, Props>(
-  ({ children, submitDateValue, center = false, specifiqStyle = "" }, ref) => {
-    const todoField = useContext(TodoFieldContext);
-    const todo = useTodoContext();
-    if (!todoField || !todo)
-      throw Error(
-        `Provide TodoField or todo context for DateInput todoField: ${todoField}, todo: ${todo} `
-      );
+  ({ children, submitDateValue, center = false, specificStyle = "" }, ref) => {
+    const toUpdate = useFunctionContext();
 
-    const updater = useUpdateTodo();
+    if (!toUpdate)
+      throw Error(
+        `Provide a functionContext toUpdate data with the component DateButton`
+      );
 
     const submit = () => {
       if (!submitDateValue) return;
-      updater({
-        ...todo,
-        [todoField]: submitDateValue,
-      });
+      toUpdate(submitDateValue);
     };
 
     return (
@@ -36,7 +28,7 @@ const DateButton = forwardRef<HTMLButtonElement, Props>(
           center ? "justify-center" : ""
         } ${
           Children.toArray(children).length === 1 ? "p-[6px]" : "px-2"
-        } ${specifiqStyle}`}
+        } ${specificStyle}`}
         ref={ref}
       >
         {children}

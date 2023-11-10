@@ -3,10 +3,6 @@ import React from "react";
 import calendarIcon from "../../public/assets/TaskDetailsCalendar.svg?url";
 import Setter from "./Setter";
 
-interface Props {
-  className?: string;
-}
-
 const ToDoDateSetter = ({ className = "" }) => {
   return (
     <Setter

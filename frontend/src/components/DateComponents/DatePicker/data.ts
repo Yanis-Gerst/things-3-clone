@@ -2,7 +2,7 @@ export const daysName = [
   "Monday",
   "Tuesday",
   "Wednesday",
-  "Thurstday",
+  "Thursday",
   "Friday",
   "Saturday",
   "Sunday",
@@ -22,3 +22,13 @@ export const monthNames = [
   "November",
   "December",
 ] as const;
+
+export const emptyTodo = (userId: string): Todos => ({
+  _id: "",
+  title: "",
+  createdAt: new Date(),
+  toDoAt: new Date(),
+  deadlineAt: new Date(),
+  userId,
+  descriptions: "",
+});
