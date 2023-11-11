@@ -5,9 +5,9 @@ import anyTimeIcon from "../public/assets/Header-Next@2x 1.png";
 import somedayIcon from "../public/assets/Header-Someday@2x 1.png";
 import journalIcon from "../public/assets/Header-Logbook-Dark@2x 1.png";
 import trashIcon from "../public/assets/Header-Trash-Dark@2x 1.png";
-import UnclassifiedPage from "./layout/UnclassifiedPage/UnclassifiedPage";
-import TodayPage from "./layout/TodayPage/TodayPage";
-import IncomingPage from "./layout/IncomingPage/IncomingPage";
+import UnclassifiedPage from "./layout/UnclassifiedPage";
+import TodayPage from "./layout/TodayPage";
+import IncomingPage from "./layout/IncomingPage";
 
 export const headerIconConfigs = [
   {
