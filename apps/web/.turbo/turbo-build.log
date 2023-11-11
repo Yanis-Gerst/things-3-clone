@@ -1,0 +1,32 @@
+
+> web-app@0.1.0 build /Users/ikims/Work/Project/crud-todo-app/apps/web
+> next build
+
+   ▲ Next.js 14.0.0
+
+   Creating an optimized production build ...
+ ⚠ Custom webpack configuration is detected. When using a custom webpack configuration, the Webpack build worker is disabled by default. To force enable it, set the "experimental.webpackBuildWorker" option to "true". Read more: https://nextjs.org/docs/messages/webpack-build-worker-opt-out
+   Disabled SWC as replacement for Babel because of custom Babel configuration ".babelrc" https://nextjs.org/docs/messages/swc-disabled
+   Using external babel configuration from /Users/ikims/Work/Project/crud-todo-app/apps/web/.babelrc
+ ⚠ It looks like there is a custom Babel configuration can be removed .
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+
+warn - The `@variants` directive has been deprecated in Tailwind CSS v3.0.
+warn - Use `@layer utilities` or `@layer components` instead.
+warn - https://tailwindcss.com/docs/upgrade-guide#replace-variants-with-layer
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/features/DeadlineSetter.tsx:11:7
+Type error: Property 'toUpdate' is missing in type '{ nextDaysToDisplay: "all"; showFooter: false; showHeader: false; displayDay: true; }' but required in type 'IDatePickerConfig'.
+
+[0m [90m  9 |[39m     [33m<[39m[33mSetter[39m[0m
+[0m [90m 10 |[39m       todoField[33m=[39m[32m"deadlineAt"[39m[0m
+[0m[31m[1m>[22m[39m[90m 11 |[39m       config[33m=[39m{{[0m
+[0m [90m    |[39m       [31m[1m^[22m[39m[0m
+[0m [90m 12 |[39m         nextDaysToDisplay[33m:[39m [32m"all"[39m[33m,[39m[0m
+[0m [90m 13 |[39m         showFooter[33m:[39m [36mfalse[39m[33m,[39m[0m
+[0m [90m 14 |[39m         showHeader[33m:[39m [36mfalse[39m[33m,[39m[0m
+ ELIFECYCLE  Command failed with exit code 1.
