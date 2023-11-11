@@ -39,7 +39,7 @@ func HandleHttpMethod(handlersMap types.MapMethodHandler) http.HandlerFunc {
 		}
 
 		if !isMethodHandle {
-			HandleError(w, errors.New("not handle method"), http.StatusBadRequest)
+			HandleError(w, errors.New("not handle method"), http.StatusMethodNotAllowed)
 		}
 
 	}

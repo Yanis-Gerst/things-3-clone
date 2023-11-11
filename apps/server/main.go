@@ -19,13 +19,13 @@ func init() {
 	if err != nil {
 		log.Fatal("error can't public .env file", err)
 	}
-	f.WriteString("API_ADRESS = \"" + os.Getenv("API_ADRESS") + "\"")
+	f.WriteString("API_ADRESS = \"" + os.Getenv("VERCEL_URL") + "\"")
 
 }
 
 func main() {
 	store := storage.NewStorer()
-	apiAdress := os.Getenv("API_ADRESS")
+	apiAdress := os.Getenv("VERCEL_URL")
 	server := api.NewServer(apiAdress, store)
 
 	log.Fatal(server.Start())
