@@ -10,10 +10,16 @@ import (
 )
 
 func init() {
-	err := godotenv.Load("../../.env.local")
+	err := godotenv.Load("../../.env")
 	if err != nil {
 		log.Fatal("error loading env file", err)
 	}
+
+	f, err := os.Create("../../.env.public")
+	if err != nil {
+		log.Fatal("error can't public .env file", err)
+	}
+	f.WriteString("API_ADRESS = \"" + os.Getenv("API_ADRESS") + "\"")
 
 }
 

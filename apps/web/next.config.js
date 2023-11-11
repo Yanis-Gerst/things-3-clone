@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 
 const { parsed: myEnv } = require("dotenv").config({
-  path: "../../.env.local",
+  path: "../../.env.public",
 });
 
 /** @type {import('next').NextConfig} */
