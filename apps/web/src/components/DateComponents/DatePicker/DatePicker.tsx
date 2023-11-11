@@ -10,7 +10,7 @@ export type IDatePickerConfig = {
   displayDay?: boolean;
   nextDaysToDisplay: number | "all";
   todayIcon?: boolean;
-  toUpdate: (updatedData: object) => void;
+  toUpdate: (updatedData: Date) => void;
 };
 
 interface Props {

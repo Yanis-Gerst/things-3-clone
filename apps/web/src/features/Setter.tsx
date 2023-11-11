@@ -9,7 +9,7 @@ interface Props {
   icon: any;
   alt: string;
   className?: string;
-  config: IDatePickerConfig;
+  config: Omit<IDatePickerConfig, "toUpdate">;
   todoField: keyof Todos;
 }
 
@@ -28,7 +28,7 @@ const Setter = ({ icon, alt, className = "", config, todoField }: Props) => {
   return (
     <DatePickerInput
       todoField={todoField}
-      config={config}
+      config={{ ...config, toUpdate: toUpdateContructor(todoField) }}
       className={className}
     >
       <Image
