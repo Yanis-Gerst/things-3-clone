@@ -1,0 +1,8 @@
+
+> api@1.0.0 server /Users/ikims/Work/Project/crud-todo-app/apps/server
+> go run main.go
+
+2023/11/11 13:32:07 error loading env fileopen ../.env: no such file or directory
+exit status 1
+ ELIFECYCLE  Command failed with exit code 1.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?
