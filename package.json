@@ -6,7 +6,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "server": "turbo run server"
   },
   "keywords": [],
   "author": "Ikims",

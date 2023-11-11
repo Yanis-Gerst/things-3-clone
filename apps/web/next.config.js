@@ -1,3 +1,9 @@
+const webpack = require("webpack");
+
+const { parsed: myEnv } = require("dotenv").config({
+  path: "../../.env",
+});
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -7,6 +13,7 @@ const nextConfig = {
       rule.test?.test?.(".svg")
     );
 
+    config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
       {

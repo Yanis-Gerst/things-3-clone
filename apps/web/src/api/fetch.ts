@@ -1,4 +1,4 @@
-export const api = "http://localhost:8080";
+export const api = getApiAdress();
 
 export interface ILogUserData {
   mail: string;
@@ -83,4 +83,11 @@ export async function getSessionUser() {
     },
   });
   return response.json();
+}
+
+function getApiAdress() {
+  const apiAddress = process.env.API_ADRESS;
+  if (!apiAddress) throw new Error("Can't get api adress");
+  if (!apiAddress.includes("http")) return `http://localhost${apiAddress}`;
+  return apiAddress;
 }

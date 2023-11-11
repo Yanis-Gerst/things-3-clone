@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	usersRouter "thingsCloneServer/api/endpoints/users"
 	userAuthRouter "thingsCloneServer/api/endpoints/usersAuth"
 	usersTodoRouter "thingsCloneServer/api/endpoints/usersTodo"
@@ -20,6 +21,7 @@ func NewServer(listenAddress string, store storage.Storer) *Server {
 }
 
 func (server *Server) Start() error {
+	fmt.Print("Server listening on ", server.listenAddress+"\n")
 	mux := http.NewServeMux()
 
 	usersRouter.Use(mux, server.store)

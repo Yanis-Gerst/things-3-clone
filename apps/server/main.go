@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	api "thingsCloneServer/api/server"
 	"thingsCloneServer/storage"
 
@@ -13,11 +14,14 @@ func init() {
 	if err != nil {
 		log.Fatal("error loading env file", err)
 	}
+
 }
 
 func main() {
 	store := storage.NewStorer()
+	apiAdress := os.Getenv("API_ADRESS")
+	server := api.NewServer(apiAdress, store)
 
-	server := api.NewServer(":8080", store)
 	log.Fatal(server.Start())
+
 }
