@@ -7,8 +7,6 @@
    Creating an optimized production build ...
  ⚠ Custom webpack configuration is detected. When using a custom webpack configuration, the Webpack build worker is disabled by default. To force enable it, set the "experimental.webpackBuildWorker" option to "true". Read more: https://nextjs.org/docs/messages/webpack-build-worker-opt-out
    Disabled SWC as replacement for Babel because of custom Babel configuration ".babelrc" https://nextjs.org/docs/messages/swc-disabled
-   Using external babel configuration from /Users/ikims/Work/Project/crud-todo-app/apps/web/.babelrc
- ⚠ It looks like there is a custom Babel configuration can be removed .
 
 warn - The `@variants` directive has been deprecated in Tailwind CSS v3.0.
 warn - Use `@layer utilities` or `@layer components` instead.
