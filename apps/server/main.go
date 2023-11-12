@@ -25,7 +25,6 @@ func init() {
 }
 
 func main() {
-
 	listener := gateway.ListenAndServe
 	store := storage.NewStorer()
 	apiAdress := os.Getenv("URL")
