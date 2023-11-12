@@ -11,13 +11,16 @@ import (
 	"net/http"
 )
 
+type IListener = func(addr string, handler http.Handler) error
+
 type Server struct {
 	listenAddress string
 	store         storage.Storer
+	listener      IListener
 }
 
-func NewServer(listenAddress string, store storage.Storer) *Server {
-	return &Server{listenAddress: listenAddress, store: store}
+func NewServer(listenAddress string, store storage.Storer, listener IListener) *Server {
+	return &Server{listenAddress: listenAddress, store: store, listener: listener}
 }
 
 func (server *Server) Start() error {
@@ -29,5 +32,5 @@ func (server *Server) Start() error {
 	usersTodosRouter.Use(mux, server.store)
 	userAuthRouter.Use(mux, server.store)
 
-	return http.ListenAndServe(server.listenAddress, mux)
+	return server.listener(server.listenAddress, mux)
 }

@@ -6,6 +6,7 @@ import (
 	api "thingsCloneServer/api/server"
 	"thingsCloneServer/storage"
 
+	"github.com/apex/gateway"
 	"github.com/joho/godotenv"
 )
 
@@ -24,9 +25,11 @@ func init() {
 }
 
 func main() {
+
+	listener := gateway.ListenAndServe
 	store := storage.NewStorer()
 	apiAdress := os.Getenv("URL")
-	server := api.NewServer(apiAdress, store)
+	server := api.NewServer(apiAdress, store, listener)
 
 	log.Fatal(server.Start())
 
